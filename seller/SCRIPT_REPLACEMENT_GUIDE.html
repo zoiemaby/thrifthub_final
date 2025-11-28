@@ -1,0 +1,22 @@
+<!-- Add this line before the closing </body> tag in seller_dashboard.php -->
+<!-- Replace all the inline <script> code (after the last </section>) with this single line: -->
+<script src="../assets/js/seller_dashboard.js"></script>
+
+<!-- The error handler script can stay as is -->
+<script>
+  (function(){
+    function showError(msg, url, line) {
+      var main = document.querySelector('.main-content') || document.body;
+      var box = document.createElement('div');
+      box.style = 'position:fixed;right:20px;bottom:20px;z-index:99999;background:#111;color:#fff;padding:12px 16px;border-radius:8px;max-width:360px;font-family: monospace;box-shadow:0 6px 20px rgba(0,0,0,0.4)';
+      box.textContent = 'JS Error: ' + msg + (url ? (' @ ' + url + ':' + line) : '');
+      document.body.appendChild(box);
+      console.error('JS Error:', msg, url, line);
+    }
+    window.onerror = function(msg, url, line, col, err) { showError(msg, url, line); };
+    window.addEventListener('unhandledrejection', function(e){
+      var reason = (e && e.reason && e.reason.message) ? e.reason.message : (e && e.reason) || 'Unknown rejection';
+      showError('Unhandled promise rejection: ' + reason);
+    });
+  })();
+</script>

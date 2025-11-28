@@ -1,0 +1,9 @@
+[27-Nov-2025 19:40:58 Europe/Berlin] SellerApplication::create_application - Executing SQL: INSERT INTO seller_applications (user_id, documentation_path, status, submitted_at) 
+                VALUES (1, 'uploads/u1/documentation.csv', 'pending', NOW())
+[27-Nov-2025 19:40:58 Europe/Berlin] SellerApplication::create_application - Success! Insert ID: 1
+[27-Nov-2025 21:03:12 Europe/Berlin] SellerApplication::create_application - Executing SQL: INSERT INTO seller_applications (user_id, documentation_path, status, submitted_at) 
+                VALUES (7, 'uploads/u7/documentation.csv', 'pending', NOW())
+[27-Nov-2025 21:03:12 Europe/Berlin] SellerApplication::create_application - Success! Insert ID: 2
+[28-Nov-2025 16:51:41 Europe/Berlin] SellerApplication::create_application - Executing SQL: INSERT INTO seller_applications (user_id, documentation_path, status, submitted_at) 
+                VALUES (8, 'uploads/u8/documentation.csv', 'pending', NOW())
+[28-Nov-2025 16:51:41 Europe/Berlin] SellerApplication::create_application - Success! Insert ID: 3

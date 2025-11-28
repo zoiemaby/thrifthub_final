@@ -1,0 +1,316 @@
+2025-11-27 13:03:57 - Request received
+POST data: Array
+(
+    [fullname] => Ann Marie
+    [phone] => 0775534564
+    [email] => ann@gmail.com
+    [dob] => 2025-11-13
+    [storeName] => Ann's Closet
+    [type_id] => 1
+    [sector_id] => 5
+    [storeDescription] => great
+)
+
+FILES data: Array
+(
+    [storeLogo] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpFB35.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+    [storeBanner] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpFB46.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+)
+
+2025-11-27 13:09:16 - Request received
+POST data: Array
+(
+    [fullname] => Ann Marie
+    [phone] => 0223344567
+    [email] => ann@gmail.com
+    [dob] => 2025-11-08
+    [storeName] => Ann's Closet
+    [type_id] => 2
+    [sector_id] => 1
+    [storeDescription] => great
+)
+
+FILES data: Array
+(
+    [storeLogo] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpD77A.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+    [storeBanner] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpD77B.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+)
+
+2025-11-27 13:09:42 - Request received
+POST data: Array
+(
+    [fullname] => Ann Marie
+    [phone] => 0223344567
+    [email] => ann@gmail.com
+    [dob] => 2025-11-08
+    [storeName] => Ann's Closet
+    [type_id] => 2
+    [sector_id] => 1
+    [storeDescription] => great
+)
+
+FILES data: Array
+(
+    [storeLogo] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php3EF1.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+    [storeBanner] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php3F01.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+)
+
+2025-11-27 19:24:00 - Request received
+POST data: Array
+(
+    [fullname] => Ann Marie
+    [phone] => 0665546673
+    [email] => ann@gmail.com
+    [dob] => 2025-11-15
+    [storeName] => Ann's Closet
+    [type_id] => 1
+    [sector_id] => 3
+    [storeDescription] => great
+)
+
+FILES data: Array
+(
+    [storeLogo] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpEEB4.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+    [storeBanner] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpEEC4.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+)
+
+2025-11-27 19:30:56 - Request received
+POST data: Array
+(
+    [fullname] => Ann Marie
+    [phone] => 0665546673
+    [email] => ann@gmail.com
+    [dob] => 2025-11-15
+    [storeName] => Ann's Closet
+    [type_id] => 1
+    [sector_id] => 3
+    [storeDescription] => great
+)
+
+FILES data: Array
+(
+    [storeLogo] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php47B6.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+    [storeBanner] => Array
+        (
+            [name] => Screenshot 2025-01-14 223129.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php47C6.tmp
+            [error] => 0
+            [size] => 17701
+        )
+
+)
+
+2025-11-27 19:40:58 - Request received
+POST data: Array
+(
+    [momo_number] => 0245667784
+    [bank_name] => Republic
+    [account_number] => 00222334567
+)
+
+FILES data: Array
+(
+    [id_path] => Array
+        (
+            [name] => Screenshot 2024-12-16 220123.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php76BB.tmp
+            [error] => 0
+            [size] => 358267
+        )
+
+    [address_path] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php76BC.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+    [selfie_path] => Array
+        (
+            [name] => Screenshot 2025-01-14 223129.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\php76CD.tmp
+            [error] => 0
+            [size] => 17701
+        )
+
+)
+
+Creating application for user: 1 with CSV: uploads/u1/documentation.csv
+Result: Array
+(
+    [success] => 1
+    [message] => Seller application submitted successfully. We will review it soon.
+    [application_id] => 1
+)
+
+2025-11-27 21:03:12 - Request received
+POST data: Array
+(
+    [momo_number] => 0542991388
+    [bank_name] => Republic
+    [account_number] => 00222334567
+)
+
+FILES data: Array
+(
+    [id_path] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpBE54.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+    [address_path] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpBE55.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+    [selfie_path] => Array
+        (
+            [name] => Screenshot 2024-12-17 153826.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpBE56.tmp
+            [error] => 0
+            [size] => 58846
+        )
+
+)
+
+Creating application for user: 7 with CSV: uploads/u7/documentation.csv
+Application creation result: Array
+(
+    [success] => 1
+    [message] => Seller application submitted successfully. We will review it soon.
+    [application_id] => 2
+)
+
+2025-11-28 16:51:41 - Request received
+POST data: Array
+(
+    [momo_number] => 0244238783
+    [bank_name] => GCB
+    [account_number] => 00445556987
+)
+
+FILES data: Array
+(
+    [id_path] => Array
+        (
+            [name] => Visual Chart Page Iteration 6.png
+            [type] => image/png
+            [tmp_name] => C:\xampp\tmp\phpEFE5.tmp
+            [error] => 0
+            [size] => 197901
+        )
+
+    [address_path] => Array
+        (
+            [name] => Ashesi CV Template (ZOIE).pdf
+            [type] => application/pdf
+            [tmp_name] => C:\xampp\tmp\phpEFE6.tmp
+            [error] => 0
+            [size] => 113215
+        )
+
+    [selfie_path] => Array
+        (
+            [name] => presentation format.jpg
+            [type] => image/jpeg
+            [tmp_name] => C:\xampp\tmp\phpEFE7.tmp
+            [error] => 0
+            [size] => 73183
+        )
+
+)
+
+Creating application for user: 8 with CSV: uploads/u8/documentation.csv
+Application creation result: Array
+(
+    [success] => 1
+    [message] => Seller application submitted successfully. We will review it soon.
+    [application_id] => 3
+)
+
