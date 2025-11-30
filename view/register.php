@@ -544,7 +544,7 @@
                 name="phone" 
                 class="form-input" 
                 placeholder="+233 54 000 0000" 
-                pattern="^[+0-9\s-]{7,}$"
+                pattern="^[0-9()+\- ]{7,}$"
               />
             </div>
             <div class="input-hint">Optional - for order updates</div>
@@ -798,12 +798,13 @@
           body: formData
         });
 
-        const result = await response.text();
+        const result = await response.json().catch(() => null);
         
-        if (response.ok) {
+        if (response.ok && result && result.success) {
           window.location.href = 'login.php?registered=1';
         } else {
-          errorMessage.textContent = result || 'An error occurred. Please try again.';
+          const msg = (result && result.message) ? result.message : 'An error occurred. Please try again.';
+          errorMessage.textContent = msg;
           errorMessage.classList.add('show');
           submitBtn.classList.remove('loading');
           submitBtn.disabled = false;
