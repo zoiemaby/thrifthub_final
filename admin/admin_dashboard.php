@@ -514,12 +514,6 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
             <span id="pending-count" style="margin-left: auto; background: var(--pending); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; display: none;">0</span>
           </a>
         </li>
-        <li class="sidebar-item">
-          <a href="#buyers" class="sidebar-link" data-section="buyers">
-            <span>🛒</span>
-            <span>Buyers</span>
-          </a>
-        </li>
       </ul>
     </aside>
 
@@ -870,14 +864,18 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
           // Recent sellers
           const rs = data.recent?.sellers || [];
           const rsTable = document.getElementById('recent-sellers-table');
-          rsTable.innerHTML = rs.length ? rs.map(s => `
+          rsTable.innerHTML = rs.length ? rs.map(s => {
+            const status = s.status || 'pending';
+            const statusText = status === 'approved' ? 'Approved' : status === 'rejected' ? 'Declined' : 'Pending';
+            return `
             <tr>
               <td>${s.name ? s.name : 'Unknown'}</td>
               <td>${s.email ? s.email : ''}</td>
-              <td><span class="status-badge ${s.verified==1?'approved':'pending'}">${s.verified==1?'Approved':'Pending'}</span></td>
+              <td><span class="status-badge ${status}">${statusText}</span></td>
               <td>${s.date ? new Date(s.date).toLocaleDateString() : ''}</td>
             </tr>
-          `).join('') : `
+            `;
+          }).join('') : `
             <tr><td colspan="4" class="empty-state"><div class="empty-state-text">No sellers yet</div></td></tr>
           `;
 

@@ -42,11 +42,11 @@ class AdminController extends Database {
 
     public function getRecentUsers($limit = 5) {
         $limit = (int)$limit;
-        // Recent sellers: use users.created_at since sellers table has no timestamp
-        $recentSellers = $this->fetchAll("SELECT u.name, u.email, s.verified, u.created_at AS date
-                                          FROM sellers s
-                                          JOIN users u ON s.user_id = u.user_id
-                                          ORDER BY u.created_at DESC
+        // Recent sellers: get from seller_applications to include status
+        $recentSellers = $this->fetchAll("SELECT u.name, u.email, sa.status, sa.submitted_at AS date
+                                          FROM seller_applications sa
+                                          JOIN users u ON sa.user_id = u.user_id
+                                          ORDER BY sa.submitted_at DESC
                                           LIMIT $limit");
         // Recent buyers/customers: join customers to users for complete info
         $recentBuyers = $this->fetchAll("SELECT u.name, u.email, u.created_at AS date

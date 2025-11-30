@@ -644,7 +644,7 @@ if ($existingApp['success']) {
         <div class="logo">TH</div>
         <div class="header-title">Seller Verification</div>
       </div>
-      <a href="#" class="help-link">
+      <a href="../actions/start_support_chat.php" class="help-link" title="Chat with a ThriftHub support admin" style="cursor:pointer;">
         <span>💬</span>
         <span>Need help verifying? Chat with support</span>
       </a>
