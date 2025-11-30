@@ -15,7 +15,16 @@ if (!isset($_SESSION['logged_in']) || !isset($_SESSION['user_id'])) {
 $userId = (int)$_SESSION['user_id'];
 $userName = $_SESSION['customer_name'] ?? $_SESSION['name'] ?? 'User';
 $userRole = isset($_SESSION['user_role_no']) ? (int)$_SESSION['user_role_no'] : 0;
-$backLink = ($userRole === ROLE_ADMIN) ? '../admin/admin_dashboard.php' : '../index.php';
+
+// Determine back link based on user role
+if ($userRole === ROLE_ADMIN) {
+    $backLink = '../admin/admin_dashboard.php';
+} elseif ($userRole === ROLE_SELLER) {
+    $backLink = 'seller_dashboard.php';
+} else {
+    // Customer/Buyer
+    $backLink = 'browse_products.php';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
