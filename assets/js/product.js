@@ -89,7 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!brandSelect) return;
         
         try {
-            const response = await fetch('../actions/get_brands_for_product_action.php');
+            // Use seller-scoped brands endpoint
+            const response = await fetch('../actions/fetch_brand_action.php');
             const result = await response.json();
             
             if (result.success && result.brands) {
