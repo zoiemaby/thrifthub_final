@@ -480,6 +480,103 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
       color: var(--text-dark);
       font-size: 14px;
     }
+
+    /* Conversations List */
+    .conversation-item {
+      background: var(--beige);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .conversation-item:hover {
+      background: var(--white);
+      border-color: var(--thrift-green);
+      transform: translateX(4px);
+    }
+
+    .conversation-item.unread {
+      background: rgba(15, 94, 77, 0.05);
+      border-color: var(--thrift-green);
+    }
+
+    .conversation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .conversation-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .conversation-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--thrift-green);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .conversation-info {
+      flex: 1;
+    }
+
+    .conversation-name {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .conversation-preview {
+      color: var(--text-muted);
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .conversation-meta {
+      text-align: right;
+    }
+
+    .conversation-time {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .unread-badge {
+      background: var(--error);
+      color: var(--white);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .support-badge {
+      display: inline-block;
+      background: rgba(15, 94, 77, 0.1);
+      color: var(--thrift-green);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
   </style>
 </head>
 
@@ -512,6 +609,13 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
             <span>👥</span>
             <span>Seller Management</span>
             <span id="pending-count" style="margin-left: auto; background: var(--pending); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; display: none;">0</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="#messages" class="sidebar-link" data-section="messages">
+            <span>💬</span>
+            <span>Messages</span>
+            <span id="unread-count" style="margin-left: auto; background: var(--error); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; display: none;">0</span>
           </a>
         </li>
       </ul>
@@ -697,6 +801,24 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Messages Section -->
+      <section id="messages" class="section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span>💬</span>
+            <span>Messages</span>
+          </h2>
+          <p class="section-subtitle">View and respond to support messages from sellers</p>
+        </div>
+
+        <div id="conversations-container">
+          <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <div class="empty-state-text">Loading conversations...</div>
+          </div>
         </div>
       </section>
     </main>
@@ -893,7 +1015,108 @@ $pendingSellers = $result['success'] ? $result['applications'] : [];
           `;
         })
         .catch(err => console.error('Admin stats error:', err));
+
+      // Load conversations for messages section
+      loadConversations();
     });
+
+    function loadConversations() {
+      fetch('../actions/fetch_inbox.php')
+        .then(r => r.json())
+        .then(data => {
+          if (!data.success) {
+            document.getElementById('conversations-container').innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon">💬</div>
+                <div class="empty-state-text">No conversations yet</div>
+              </div>
+            `;
+            return;
+          }
+
+          const conversations = data.conversations || [];
+          if (conversations.length === 0) {
+            document.getElementById('conversations-container').innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon">💬</div>
+                <div class="empty-state-text">No conversations yet</div>
+              </div>
+            `;
+            return;
+          }
+
+          // Count unread messages
+          const unreadCount = conversations.filter(c => (c.unread_count || 0) > 0).length;
+          const unreadBadge = document.getElementById('unread-count');
+          if (unreadCount > 0) {
+            unreadBadge.textContent = unreadCount;
+            unreadBadge.style.display = 'inline-block';
+          } else {
+            unreadBadge.style.display = 'none';
+          }
+
+          const conversationsHtml = conversations.map(conv => {
+            const otherUser = conv.other_user_name || 'Unknown User';
+            const otherEmail = conv.other_user_email || '';
+            const lastMessage = conv.last_message || 'No messages yet';
+            const lastMessageTime = conv.last_message_time ? formatTime(conv.last_message_time) : '';
+            const unread = conv.unread_count || 0;
+            const isSupport = !conv.product_id; // Support conversations have no product
+            const initials = otherUser.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+            return `
+              <div class="conversation-item ${unread > 0 ? 'unread' : ''}" onclick="openChat(${conv.conversation_id})">
+                <div class="conversation-header">
+                  <div class="conversation-user">
+                    <div class="conversation-avatar">${initials}</div>
+                    <div class="conversation-info">
+                      <div class="conversation-name">
+                        ${otherUser}
+                        ${isSupport ? '<span class="support-badge">Support</span>' : ''}
+                      </div>
+                      <div class="conversation-preview">${lastMessage}</div>
+                    </div>
+                  </div>
+                  <div class="conversation-meta">
+                    <div class="conversation-time">${lastMessageTime}</div>
+                    ${unread > 0 ? `<span class="unread-badge">${unread}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          document.getElementById('conversations-container').innerHTML = conversationsHtml;
+        })
+        .catch(err => {
+          console.error('Error loading conversations:', err);
+          document.getElementById('conversations-container').innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">⚠️</div>
+              <div class="empty-state-text">Error loading conversations</div>
+            </div>
+          `;
+        });
+    }
+
+    function openChat(conversationId) {
+      window.location.href = '../view/chat.php?conversation_id=' + conversationId;
+    }
+
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 1) return 'Just now';
+      if (minutes < 60) return minutes + 'm ago';
+      if (hours < 24) return hours + 'h ago';
+      if (days < 7) return days + 'd ago';
+      return date.toLocaleDateString();
+    }
   </script>
 </body>
 
