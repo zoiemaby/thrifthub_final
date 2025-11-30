@@ -11,18 +11,7 @@
 require_once __DIR__ . '/../settings/core.php';
 require_once __DIR__ . '/../controllers/sellerApplication_controller.php';
 
-// Enable error logging for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../error_log.txt');
-
 header('Content-Type: application/json; charset=utf-8');
-
-// Log the request
-file_put_contents(__DIR__ . '/../debug_log.txt', date('Y-m-d H:i:s') . " - Request received\n", FILE_APPEND);
-file_put_contents(__DIR__ . '/../debug_log.txt', "POST data: " . print_r($_POST, true) . "\n", FILE_APPEND);
-file_put_contents(__DIR__ . '/../debug_log.txt', "FILES data: " . print_r($_FILES, true) . "\n", FILE_APPEND);
 
 // Check if user is logged in
 if (!isset($_SESSION['logged_in']) || !isset($_SESSION['user_id'])) {
@@ -166,10 +155,7 @@ try {
     $csvRelativePath = "uploads/u{$userId}/documentation.csv";
 
     // Create seller application in database
-    file_put_contents(__DIR__ . '/../debug_log.txt', "Creating application for user: $userId with CSV: $csvRelativePath\n", FILE_APPEND);
     $result = $controller->create_seller_application_ctrl($userId, $csvRelativePath);
-
-    file_put_contents(__DIR__ . '/../debug_log.txt', "Application creation result: " . print_r($result, true) . "\n", FILE_APPEND);
 
     if ($result['success']) {
         http_response_code(200);
