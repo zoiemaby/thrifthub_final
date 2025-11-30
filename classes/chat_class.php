@@ -171,7 +171,11 @@ class Chat extends Database {
                        CASE 
                            WHEN c.buyer_id = $userId THEN seller.name
                            ELSE buyer.name
-                       END as other_party_name,
+                       END as other_user_name,
+                       CASE 
+                           WHEN c.buyer_id = $userId THEN seller.email
+                           ELSE buyer.email
+                       END as other_user_email,
                        CASE 
                            WHEN c.buyer_id = $userId THEN seller.user_id
                            ELSE buyer.user_id

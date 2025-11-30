@@ -32,13 +32,36 @@ if (!$conversationResult['success']) {
 
 $conversation = $conversationResult['conversation'];
 
-// Determine other party
+// Determine other party and if this is a support conversation
+$isSupport = !$conversation['product_id']; // No product means support chat
+$currentUserRole = isset($_SESSION['user_role_no']) ? (int)$_SESSION['user_role_no'] : 0;
+
 if ($userId == $conversation['buyer_id']) {
     $otherPartyName = $conversation['seller_name'];
-    $otherPartyRole = 'Seller';
+    // If support chat and other party is admin, show "Support" instead of "Seller"
+    if ($isSupport && $currentUserRole !== ROLE_ADMIN) {
+        $otherPartyRole = 'Support';
+    } else {
+        $otherPartyRole = 'Seller';
+    }
 } else {
     $otherPartyName = $conversation['buyer_name'];
-    $otherPartyRole = 'Buyer';
+    // If support chat and current user is admin, don't show role or show appropriate label
+    if ($isSupport && $currentUserRole === ROLE_ADMIN) {
+        $otherPartyRole = 'Seller'; // Admin sees "Seller" for support requests
+    } else {
+        $otherPartyRole = 'Buyer';
+    }
+}
+
+// Determine back link based on user role and context
+$backLink = 'chat_inbox.php';
+if ($isSupport) {
+    if ($currentUserRole === ROLE_ADMIN) {
+        $backLink = '../admin/admin_dashboard.php#messages';
+    } else {
+        $backLink = 'seller_verification.php';
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -318,7 +341,7 @@ if ($userId == $conversation['buyer_id']) {
                     <p><?php echo htmlspecialchars($otherPartyRole); ?></p>
                 </div>
             </div>
-            <a href="chat_inbox.php" class="back-btn">← Back</a>
+            <a href="<?php echo htmlspecialchars($backLink); ?>" class="back-btn">← Back</a>
         </div>
 
         <!-- Product Info (if applicable) -->

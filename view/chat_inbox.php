@@ -14,6 +14,8 @@ if (!isset($_SESSION['logged_in']) || !isset($_SESSION['user_id'])) {
 
 $userId = (int)$_SESSION['user_id'];
 $userName = $_SESSION['customer_name'] ?? $_SESSION['name'] ?? 'User';
+$userRole = isset($_SESSION['user_role_no']) ? (int)$_SESSION['user_role_no'] : 0;
+$backLink = ($userRole === ROLE_ADMIN) ? '../admin/admin_dashboard.php' : '../index.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -214,7 +216,7 @@ $userName = $_SESSION['customer_name'] ?? $_SESSION['name'] ?? 'User';
     <div class="container">
         <div class="header">
             <h1>💬 Messages</h1>
-            <a href="../index.php" class="back-btn">← Back to Home</a>
+            <a href="<?php echo htmlspecialchars($backLink); ?>" class="back-btn">← Back to Home</a>
         </div>
 
         <div class="conversations-list" id="conversationsList">
