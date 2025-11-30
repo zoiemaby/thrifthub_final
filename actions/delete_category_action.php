@@ -4,8 +4,17 @@
  * ThriftHub - Category Deletion Handler
  */
 
+// Start output buffering to prevent any accidental output
+ob_start();
+
+// Suppress errors that might break JSON response
+error_reporting(E_ERROR | E_PARSE);
+
 require_once __DIR__ . '/../settings/core.php';
 require_once __DIR__ . '/../controllers/category_controller.php';
+
+// Clear any previous output
+ob_clean();
 
 header('Content-Type: application/json; charset=utf-8');
 

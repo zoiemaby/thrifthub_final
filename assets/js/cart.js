@@ -122,7 +122,19 @@ async function addToCart(productId, quantity = 1) {
  * Remove item from cart
  */
 async function removeFromCart(cartId) {
-    if (!confirm('Are you sure you want to remove this item from your cart?')) {
+    // Use SweetAlert2 for confirmation
+    const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to remove this item from your cart?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#0F5E4D',
+        cancelButtonColor: '#6B6B6B',
+        confirmButtonText: 'Yes, remove it',
+        cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) {
         return;
     }
     
@@ -135,14 +147,20 @@ async function removeFromCart(cartId) {
             body: formData
         });
         
-        const result = await response.json();
+        const apiResult = await response.json();
         
-        if (result.success) {
-            showSuccess(result.message || 'Item removed from cart.');
+        if (apiResult.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Removed!',
+                text: apiResult.message || 'Item removed from cart.',
+                timer: 2000,
+                showConfirmButton: false
+            });
             loadCart();
             updateCartBadge();
         } else {
-            showError(result.message || 'Failed to remove item from cart.');
+            showError(apiResult.message || 'Failed to remove item from cart.');
         }
     } catch (error) {
         console.error('Error removing from cart:', error);
@@ -190,7 +208,19 @@ async function updateQuantity(cartId, quantity) {
  * Empty cart
  */
 async function emptyCart() {
-    if (!confirm('Are you sure you want to empty your cart? This action cannot be undone.')) {
+    // Use SweetAlert2 for confirmation
+    const result = await Swal.fire({
+        title: 'Empty Cart?',
+        text: 'Are you sure you want to remove all items from your cart? This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d32f2f',
+        cancelButtonColor: '#6B6B6B',
+        confirmButtonText: 'Yes, empty cart',
+        cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) {
         return;
     }
     
@@ -199,14 +229,20 @@ async function emptyCart() {
             method: 'POST'
         });
         
-        const result = await response.json();
+        const apiResult = await response.json();
         
-        if (result.success) {
-            showSuccess(result.message || 'Cart emptied successfully.');
+        if (apiResult.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cart Emptied!',
+                text: apiResult.message || 'Cart emptied successfully.',
+                timer: 2000,
+                showConfirmButton: false
+            });
             loadCart();
             updateCartBadge();
         } else {
-            showError(result.message || 'Failed to empty cart.');
+            showError(apiResult.message || 'Failed to empty cart.');
         }
     } catch (error) {
         console.error('Error emptying cart:', error);

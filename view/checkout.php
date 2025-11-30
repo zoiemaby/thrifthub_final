@@ -276,9 +276,6 @@ require_once __DIR__ . '/../settings/core.php';
         <button class="payment-btn paystack-btn" onclick="initiatePaystackPayment()" id="paystackBtn">
           <i class="fas fa-credit-card"></i> Pay with Paystack
         </button>
-        <button class="payment-btn simulate-btn" onclick="showPaymentModal()" style="margin-top: 12px; background: var(--text-muted);">
-          <i class="fas fa-flask"></i> Simulate Payment (Test)
-        </button>
       </div>
     </div>
   </div>
