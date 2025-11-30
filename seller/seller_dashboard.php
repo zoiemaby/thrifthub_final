@@ -1191,7 +1191,7 @@ $userId = (int)$_SESSION['user_id'];
               // Load brands from server
               async function loadBrands() {
               try {
-              const response = await fetch('../actions/get_brands_action.php');
+              const response = await fetch('../actions/fetch_brand_action.php');
               const result = await response.json();
 
               if (result.success) {

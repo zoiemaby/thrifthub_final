@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThriftHub Database ERD - Visual Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0F5E4D;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6B6B6B;
+            margin-bottom: 30px;
+        }
+        .mermaid {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #F6F2EA;
+            border-radius: 8px;
+            border-left: 4px solid #0F5E4D;
+        }
+        .legend h3 {
+            color: #0F5E4D;
+            margin-top: 0;
+        }
+        .legend-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+        .key {
+            font-weight: bold;
+            color: #0F5E4D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ThriftHub Database ERD</h1>
+        <p class="subtitle">Entity-Relationship Diagram - Visual Representation</p>
+        
+        <div class="mermaid">
+erDiagram
+    ROLES {
+        int role_no PK
+        varchar role_description
+    }
+    
+    USERS {
+        int user_id PK
+        varchar name
+        varchar email UK
+        varchar password
+        varchar phone_number
+        int user_role FK
+        timestamp created_at
+    }
+    
+    CUSTOMERS {
+        int user_id PK_FK
+    }
+    
+    SELLERS {
+        int user_id PK_FK
+        varchar shop_name
+        int type_id FK
+        int sector_id FK
+        varchar store_logo
+        varchar store_banner
+        text description
+        tinyint verified
+    }
+    
+    BRANDS {
+        int brand_id PK
+        int user_id FK
+        varchar brand_name
+    }
+    
+    CATEGORIES {
+        int cat_id PK
+        int user_id FK
+        varchar cat_name
+    }
+    
+    PRODUCTS {
+        int product_id PK
+        int product_cat FK
+        int product_brand FK "nullable"
+        int seller_id FK "nullable"
+        varchar product_title
+        decimal product_price
+        text product_desc
+        varchar product_image
+        varchar product_keywords
+        enum product_condition
+        enum product_status
+        timestamp created_at
+    }
+    
+    CART {
+        int cart_id PK
+        int p_id FK
+        varchar ip_add
+        int c_id FK "nullable"
+        int qty
+        timestamp added_at
+    }
+    
+    ORDERS {
+        int order_id PK
+        int customer_id FK
+        datetime order_date
+        enum order_status
+        decimal total_amount
+    }
+    
+    ORDERDETAILS {
+        int orderdetail_id PK
+        int order_id FK
+        int product_id FK
+        int qty
+        decimal price
+    }
+    
+    PAYMENTS {
+        int pay_id PK
+        decimal amount
+        int customer_id FK
+        int order_id FK
+        varchar currency
+        enum payment_method
+        enum payment_status
+        datetime payment_date
+        varchar transaction_ref
+        varchar authorization_code
+        varchar payment_channel
+    }
+    
+    CONVERSATIONS {
+        int conversation_id PK
+        int buyer_id FK
+        int seller_id FK
+        int product_id FK "nullable"
+        datetime created_at
+        datetime updated_at
+    }
+    
+    MESSAGES {
+        int message_id PK
+        int conversation_id FK
+        int sender_id FK
+        int receiver_id FK
+        text message_text
+        tinyint is_read
+        datetime created_at
+    }
+    
+    SELLER_APPLICATIONS {
+        int application_id PK
+        int user_id FK
+        varchar documentation_path
+        enum status
+        timestamp submitted_at
+        timestamp reviewed_at
+        int reviewed_by FK "nullable"
+    }
+    
+    BUSINESS_TYPES {
+        int type_id PK
+        varchar type_description
+    }
+    
+    SECTORS {
+        int sector_id PK
+        varchar sector_description
+    }
+
+    %% Relationships
+    ROLES ||--o{ USERS : "has role"
+    USERS ||--o| CUSTOMERS : "is customer"
+    USERS ||--o| SELLERS : "is seller"
+    USERS ||--o{ BRANDS : "creates"
+    USERS ||--o{ CATEGORIES : "creates"
+    USERS ||--o{ CART : "has items"
+    USERS ||--o{ ORDERS : "places"
+    USERS ||--o{ PAYMENTS : "makes"
+    USERS ||--o{ CONVERSATIONS : "buyer"
+    USERS ||--o{ CONVERSATIONS : "seller"
+    USERS ||--o{ MESSAGES : "sends"
+    USERS ||--o{ MESSAGES : "receives"
+    USERS ||--o{ SELLER_APPLICATIONS : "submits"
+    USERS ||--o{ SELLER_APPLICATIONS : "reviews"
+    
+    CATEGORIES ||--o{ PRODUCTS : "categorizes"
+    BRANDS ||--o{ PRODUCTS : "brands"
+    SELLERS ||--o{ PRODUCTS : "sells"
+    PRODUCTS ||--o{ CART : "added to"
+    PRODUCTS ||--o{ ORDERDETAILS : "ordered as"
+    PRODUCTS ||--o{ CONVERSATIONS : "discussed in"
+    
+    ORDERS ||--o{ ORDERDETAILS : "contains"
+    ORDERS ||--o{ PAYMENTS : "paid by"
+    
+    CONVERSATIONS ||--o{ MESSAGES : "contains"
+    
+    BUSINESS_TYPES ||--o{ SELLERS : "categorizes"
+    SECTORS ||--o{ SELLERS : "categorizes"
+        </div>
+        
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <span class="key">PK</span> = Primary Key
+            </div>
+            <div class="legend-item">
+                <span class="key">FK</span> = Foreign Key
+            </div>
+            <div class="legend-item">
+                <span class="key">UK</span> = Unique Key
+            </div>
+            <div class="legend-item">
+                <span class="key">||--o{</span> = One-to-Many Relationship
+            </div>
+            <div class="legend-item">
+                <span class="key">||--o|</span> = One-to-One Relationship
+            </div>
+            <div class="legend-item">
+                <span class="key">nullable</span> = Optional Foreign Key (can be NULL)
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #F6F2EA; border-radius: 8px;">
+            <h3 style="color: #0F5E4D; margin-top: 0;">Database Statistics</h3>
+            <p><strong>Total Tables:</strong> 16</p>
+            <p><strong>Core Tables:</strong> 7 (users, roles, customers, sellers, products, categories, brands)</p>
+            <p><strong>Transaction Tables:</strong> 4 (cart, orders, orderdetails, payments)</p>
+            <p><strong>Communication Tables:</strong> 2 (conversations, messages)</p>
+            <p><strong>Supporting Tables:</strong> 3 (seller_applications, business_types, sectors)</p>
+            <p><strong>Total Relationships:</strong> 23</p>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#0F5E4D',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#0A4538',
+                lineColor: '#1A7A66',
+                secondaryColor: '#F6F2EA',
+                tertiaryColor: '#C9A961'
+            }
+        });
+    </script>
+</body>
+</html>
+
