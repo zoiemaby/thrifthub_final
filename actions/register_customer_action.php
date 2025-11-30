@@ -11,14 +11,19 @@
 // Include the customer controller
 require_once __DIR__ . '/../controllers/customer_controller.php';
 
-// Set content type for text response
-header('Content-Type: text/plain; charset=utf-8');
+// For API consistency, return JSON
+header('Content-Type: application/json; charset=utf-8');
+
+// Helper to send JSON and exit
+function send_json($data, $status = 200) {
+    http_response_code($status);
+    echo json_encode($data);
+    exit;
+}
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo 'Method not allowed. Only POST requests are accepted.';
-    exit;
+    send_json(['success' => false, 'message' => 'Method not allowed. Only POST requests are accepted.'], 405);
 }
 
 // Initialize the customer controller
@@ -35,62 +40,44 @@ $terms = isset($_POST['terms']) ? $_POST['terms'] : '';
 
 // Validate required fields
 if (empty($fullname)) {
-    http_response_code(400);
-    echo 'Full name is required.';
-    exit;
+    send_json(['success' => false, 'message' => 'Full name is required.'], 400);
 }
 
 if (empty($email)) {
-    http_response_code(400);
-    echo 'Email address is required.';
-    exit;
+    send_json(['success' => false, 'message' => 'Email address is required.'], 400);
 }
 
 if (empty($password)) {
-    http_response_code(400);
-    echo 'Password is required.';
-    exit;
+    send_json(['success' => false, 'message' => 'Password is required.'], 400);
 }
 
 if (empty($confirmPassword)) {
-    http_response_code(400);
-    echo 'Please confirm your password.';
-    exit;
+    send_json(['success' => false, 'message' => 'Please confirm your password.'], 400);
 }
 
 // Validate password confirmation
 if ($password !== $confirmPassword) {
-    http_response_code(400);
-    echo 'Passwords do not match.';
-    exit;
+    send_json(['success' => false, 'message' => 'Passwords do not match.'], 400);
 }
 
 // Validate terms acceptance
 if (empty($terms)) {
-    http_response_code(400);
-    echo 'You must agree to the Terms of Service and Privacy Policy.';
-    exit;
+    send_json(['success' => false, 'message' => 'You must agree to the Terms of Service and Privacy Policy.'], 400);
 }
 
 // Validate email format
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo 'Invalid email format.';
-    exit;
+    send_json(['success' => false, 'message' => 'Invalid email format.'], 400);
 }
 
 // Validate password strength
 if (strlen($password) < 6) {
-    http_response_code(400);
-    echo 'Password must be at least 6 characters long.';
-    exit;
+    send_json(['success' => false, 'message' => 'Password must be at least 6 characters long.'], 400);
 }
 
 // Validate fullname length
 if (strlen($fullname) < 2) {
-    http_response_code(400);
-    echo 'Full name must be at least 2 characters long.';
-    exit;
+    send_json(['success' => false, 'message' => 'Full name must be at least 2 characters long.'], 400);
 }
 
 // Determine requested role (optional toggle). Accept only 'customer' or 'seller'. Default 'customer'.
@@ -112,18 +99,24 @@ $registrationData = [
 ];
 
 // Call the controller's register method
-$result = $controller->register($registrationData);
-
-// Handle the response
-if ($result['success']) {
-    // Registration successful
-    http_response_code(200);
-    echo 'Registration successful! Redirecting to login...';
-} else {
-    // Registration failed
-    http_response_code(400);
-    echo $result['message'] ?? 'Registration failed. Please try again.';
+// Guard controller call to avoid 500s on live
+try {
+    $result = $controller->register($registrationData);
+} catch (Throwable $e) {
+    error_log('register_customer_action fatal: ' . $e->getMessage());
+    send_json(['success' => false, 'message' => 'Server error. Please try again later.'], 500);
 }
 
-exit;
+// Handle the response
+if (!is_array($result)) {
+    send_json(['success' => false, 'message' => 'Unexpected response from server.'], 500);
+}
+
+if ($result['success']) {
+    send_json(['success' => true, 'message' => 'Registration successful.']);
+} else {
+    $msg = $result['message'] ?? 'Registration failed. Please try again.';
+    // If email exists, make message clear
+    send_json(['success' => false, 'message' => $msg], 400);
+}
 

@@ -43,8 +43,9 @@ class Customer extends Database {
         }
 
         // Insert into users (core identity table)
-        $sqlUser = "INSERT INTO users (name, email, password, phone_number, user_role) VALUES ('$nameEsc', '$emailEsc', '$hashedEsc', $phoneEsc, 
-            (SELECT role_no FROM roles WHERE role_description = '$roleEsc' LIMIT 1))";
+        // Ensure role resolves even if roles table is missing/empty on live server
+        $sqlUser = "INSERT INTO users (name, email, password, phone_number, user_role) VALUES ('$nameEsc', '$emailEsc', '$hashedEsc', $phoneEsc,
+            COALESCE((SELECT role_no FROM roles WHERE role_description = '$roleEsc' LIMIT 1), 2))"; // default to 'customer' role_no = 2
 
         if ($this->query($sqlUser)) {
             $userId = $this->insert_id();
